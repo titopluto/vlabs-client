@@ -1,0 +1,45 @@
+{
+  "user_id": "null",
+  "isFetching": "false",
+    "info": [
+      {
+        "username": "testuser",
+        "first_name": "test",
+        "last_name": "user",
+        "email": "testuser@dal.ca",
+        "groups": [
+          {
+            "name": "jan2015"
+          }
+        ],
+        "courses_taken": [
+          {
+            "code": "inwk6115",
+            "title": "Network Architecture",
+            "labs": [
+              {
+                "code": "inwk6115-Lab",
+                "title": "OSPF Configuration Testing",
+                "manual": "http://localhost:8000/media/labManuals/lab1_76KXRHX.pdf"
+              },
+              {
+                "code": "inwk6115-Lab2",
+                "title": "MPLS Labs",
+                "manual": "http://localhost:8000/media/labManuals/lab2.pdf"
+              }
+            ]
+          },
+          {
+            "code": "inwk6312",
+            "title": "Programming Course",
+            "labs": []
+          }
+        ],
+        "is_staff": false,
+        "is_active": true
+      }
+    ]
+
+}
+
+

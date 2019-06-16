@@ -1,0 +1,172 @@
+import React, {Component} from 'react'
+import _ from 'lodash'
+import {connect} from 'react-redux'
+import {socketSend} from "../../redux/actions";
+import C from "../../redux/actions/constants"
+
+import {Button, Card, CardBody, CardHeader, Col, Table} from 'reactstrap';
+
+import {labName} from "./data/podsModel";
+
+const uuidv1 = require('uuid/v1');
+
+
+class GraderFailedConnections extends Component {
+
+  constructor(props) {
+    super(props)
+  }
+
+  handleReplyClick = (obj, username) => {
+    const { node_commands, lab, folder_name, job_count } = this.props;
+
+    if (job_count === 0) {
+      this.props.dispatch({
+        type: C.REMOVE_FAILED_ENTITY,
+        data: {key: 'failed_connections', username}
+      })
+
+       this.props.dispatch({
+         type: C.RESET_GRADER_CONTENTS,
+         data: {mode:'retry'}
+       })
+
+      const data = {
+        type: 'pods_retry_mode',
+        command_list: node_commands,
+        lab,
+        folder_name,
+        device: [obj]
+      };
+      this.props.dispatch(socketSend('autograder_pods', data))
+    }
+    else{
+      this.props.dispatch({
+        type: C.SEND_NOTIFICATION,
+        data: {reducerType:'labgraderPods',
+          msg:{type:'warning', msg:'You still have an active job running'}}
+      })
+    }
+
+  }
+
+  handleReplyAllClick = () => {
+    const { node_commands, lab, folder_name, job_count, failed_connections } = this.props;
+
+    if (job_count === 0) {
+      this.props.dispatch({
+        type: C.REMOVE_ALL_FAILED_ENTITY,
+        data: {key: 'failed_connections'}
+      })
+
+       this.props.dispatch({
+         type: C.RESET_GRADER_CONTENTS,
+         data: {mode:'retry'}
+       })
+
+      let arr = []
+      _.map(failed_connections, (value, key) => arr.push({[key]:value}))
+      console.log(arr)
+
+      const data = {
+        type: 'pods_retry_mode',
+        command_list: node_commands,
+        lab,
+        folder_name,
+        device:arr
+      };
+      this.props.dispatch(socketSend('autograder_pods', data))
+    }
+    else{
+      this.props.dispatch({
+        type: C.SEND_NOTIFICATION,
+        data: {reducerType:'labgraderPods',
+          msg:{type:'warning', msg:'You still have an active job running'}}
+      })
+    }
+
+  }
+
+  renderData = (devices_arr, username, obj) => {
+    console.log(obj, username)
+    let arr = []
+    _.map(devices_arr, (device) => arr.push(device[0]))
+
+    return (
+          <tr key={uuidv1()}>
+            <td className='align-middle' >
+              <div className='ml-2 font-weight-bold'>
+                {username}
+                </div>
+            </td>
+            <td> {_.map(arr, (device, i) =>
+              <div key={i}>
+                <Button className='border border-warning' block> {device} </Button>
+              </div>)}
+              </td>
+            <td className='align-middle'>
+              <Button className='ml-2'
+                color='primary'
+                onClick={() => this.handleReplyClick({[username]:obj[username]}, username)}>
+                Retry
+              </Button>
+            </td>
+
+          </tr>
+        )
+  }
+
+  render() {
+    const { failed_connections} = this.props;
+    return (
+      <Col xs="12" lg="6">
+            <Card>
+              <CardHeader className='d-flex bg-secondary'>
+                <i className="cui-ban icons font-xl d-block"> </i>
+                Failed Connections
+                { !_.isEmpty(failed_connections) ?
+                  <Button className='ml-auto'
+                          color='danger'
+                          size='sm'
+                          onClick={() => this.handleReplyAllClick()}
+                  > Retry All </Button>
+                  : null
+                }
+              </CardHeader>
+              <CardBody>
+                <Table hover bordered striped responsive size="sm">
+                  <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Device</th>
+                    <th> </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  { _.map(failed_connections, this.renderData)}
+                  </tbody>
+                </Table>
+              </CardBody>
+            </Card>
+          </Col>
+    )
+  }
+}
+
+
+const mapStateToProps = state => (
+  {
+    failed_connections: state.labgraderPods.grader_report.failed_connections,
+    node_commands: state.graderWhiteBoard.node_commands_pods,
+    folder_name: state.labgraderPods.folder_name,
+    lab: labName,
+    job_count: state.labgraderPods.job_count
+  })
+
+const mapDispatchToProps = dispatch => (
+  {
+    dispatch
+  }
+)
+
+export default connect(mapStateToProps, mapDispatchToProps)(GraderFailedConnections);

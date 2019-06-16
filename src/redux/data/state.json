@@ -1,0 +1,41 @@
+{
+  "user_data": {
+    "id":"",
+    "is_fetching": "false",
+    "last_updated": "",
+    "info": {
+      "username": "",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "groups": []
+    }
+  },
+
+  "courses": {
+    "is_fetching": false,
+    "info": [
+      {
+        "code": "",
+        "title": "",
+        "labs": [
+          {
+            "code": "",
+            "title": "",
+            "manual": ""
+          }
+        ]
+      }
+    ]
+  },
+
+  "virl_data": [
+    {
+      "server_ip":"",
+      "simulation_name": "",
+      "time_started": ""
+    }
+  ]
+
+
+}

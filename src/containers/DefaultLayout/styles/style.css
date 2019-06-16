@@ -1,0 +1,18 @@
+@font-face {
+    font-family: 'Cubano-Regular';
+    src: local('Cubano-Regular.otf'), url('Cubano-Regular.otf') format('opentype');
+}
+
+.nav-span {
+    font-family: "Cubano-Regular";
+    font-size: 25px;
+    color:white;
+}
+
+.bold-gold {
+    color: darkgoldenrod
+}
+
+.nav-link a {
+    color: #9fa1a3 !important;
+}

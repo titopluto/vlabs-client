@@ -1,0 +1,13 @@
+.dash-color {
+    background-color: rgba(50, 112, 160, 0.9);
+}
+
+.bg-card {
+    /*background-color: rgba(50, 112, 160, 0.9) !important;*/
+    background-color: rgb(42,44,54) !important;
+
+}
+
+.input-style {
+    border-radius: 90px
+}
