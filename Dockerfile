@@ -12,14 +12,19 @@ ENV NPM_CONFIG_LOGLEVEL warn
 # Change working directory
 WORKDIR /home/inwk-labs
 
-# Copy all local files into the image.
-COPY . /home/inwk-labs
+# Copy package.json before other files to avoid unnecessary npm install(s)
+COPY ./package.json .
 
 # Install Stuff and  take care of node-sass enviroment error
-
 RUN npm install
 
+
+# Copy all local files into the image.
+COPY . .
+
+
 RUN npm rebuild node-sass
+
 
 # Build for production.
 RUN npm run build --production
